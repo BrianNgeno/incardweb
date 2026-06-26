@@ -10,7 +10,7 @@ public_bp = Blueprint("public", __name__)
 @public_bp.route("/")
 def home():
     programs = Program.query.order_by(Program.created_at.desc()).limit(3).all()
-    return render_template("templates/public/home.html", programs=programs)
+    return render_template("/public/home.html", programs=programs)
 
 
 @public_bp.route("/programs")
