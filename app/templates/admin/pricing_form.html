@@ -1,0 +1,44 @@
+{% extends 'admin/layout.html' %}{% from 'macros.html' import render_field %}{% block admin_content %}
+<h1>{{ 'Edit Pricing Plan' if pricing else 'Add Pricing Plan' }}: {{ pricing.program.title if pricing else program.title }}</h1>
+<form method="post" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ render_field(form.description) }}
+  <button class="btn">{{ 'Update Pricing' if pricing else 'Save Pricing' }}</button>
+</form>
+
+{% if pricing %}
+  <section style="margin-top:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0">Package Items</h2>
+      <a href="{{ url_for('admin.create_package', pricing_id=pricing.id) }}" class="btn btn-primary">Add Package</a>
+    </div>
+
+    {% if pricing.packages %}
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="text-align:left">
+            <th>Package</th>
+            <th style="width:180px;text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for package in pricing.packages %}
+            <tr>
+              <td style="padding:8px 0">{{ package.detail }}{% if package.included %} <strong style="color:var(--primary)">Included</strong>{% endif %}</td>
+              <td style="text-align:right">
+                <a href="{{ url_for('admin.edit_package', package_id=package.id) }}" class="btn btn-secondary" style="margin-right:8px">Edit</a>
+                <form method="post" action="{{ url_for('admin.delete_package', package_id=package.id) }}" style="display:inline" onsubmit="return confirm('Delete this package item?');">
+                  <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;border:none;cursor:pointer">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No package items added yet. Use "Add Package" to create one.</p>
+    {% endif %}
+  </section>
+{% endif %}
+
+{% endblock %}

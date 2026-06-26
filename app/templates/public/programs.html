@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="page-header">
+  <h1> Programs</h1>
+</section>
+
+<section class="programs-hero">
+  <div class="container">
+    <div class="programs-slider programs-carousel">
+      <div class="slider-window" aria-label="Programs carousel">
+        <div class="slider-track">
+          {% for program in programs %}
+          <article class="slider-slide">
+            <div class="slide-content">
+              <h1>{{ program.title }}</h1>
+              {% if program.subtitle %}<p class="program-meta" style="margin-bottom:14px">{{ program.subtitle }}</p>{% endif %}
+              {% if program.banner_image %}
+              <img src="{{ url_for('static', filename='uploads/' ~ program.banner_image) }}" alt="{{ program.title }}">
+              {% else %}
+              <img src="{{ url_for('static', filename='images/banner_photo.jpg') }}" alt="{{ program.title }}">
+              {% endif %}
+              <p class="section-sub">{{ program.description | truncate(180) }}</p>
+              <p class="program-meta">{{ program.dates or 'TBA' }} · {{ program.location or 'TBA' }}{% if program.venue %} · {{ program.venue }}{% endif %}</p>
+              <div class="hero-buttons">
+                <a href="{{ url_for('public.program_detail', program_id=program.id) }}" class="btn btn-primary">Register</a>
+                <a href="{{ url_for('public.program_detail', program_id=program.id) }}" class="btn btn-dark">View full event details</a>
+              </div>
+            </div>
+          </article>
+          {% else %}
+          <article class="slider-slide">
+            <div class="slide-content">
+              <h1>Programs Coming Soon</h1>
+              <img src="{{ url_for('static', filename='images/banner_photo.jpg') }}" alt="Programs banner">
+              <p class="section-sub">We will update this section once new training programs are available to register.</p>
+              <div class="hero-buttons">
+                <a href="{{ url_for('public.contact') }}" class="btn btn-primary">Contact Us</a>
+              </div>
+            </div>
+          </article>
+          
+          {% endfor %}
+        </div>
+      </div>
+      <button class="slider-control prev" aria-label="Previous program">&#8249;</button>
+      <button class="slider-control next" aria-label="Next program">&#8250;</button>
+    </div>
+  </div>
+</section>
+
+<section class="page-header">
+  <h1>We have Done Multiple Programs over the years across:</h1>
+</section>
+
+
+
+<section>
+  
+  <div class="container">
+    <div class="grid grid-2">
+          <article class="slider-slide program">
+            <h3>Corporate Governance & Leadership</h3>
+            <p>Programs designed for business owners, board directors, chief executives, and managers focusing on governance and leadership best practices.</p>
+          </article>
+
+          <article class="slider-slide program">
+            <h3>Public Sector Capacity Development</h3>
+            <p>Courses targeting public sector officers and corporate managers in:</p>
+            <ul>
+              <li>Finance</li><li>Accounting</li><li>Public Reforms</li>
+              <li>Procurement</li><li>Management</li><li>Audit</li>
+              <li>ICT</li><li>Project Management</li>
+            </ul>
+          </article>
+
+          <article class="slider-slide program">
+            <h3>Administrative & Customer Service Programs</h3>
+            <p>Training for:</p>
+            <ul>
+              <li>Office Administrators</li><li>Secretaries</li>
+              <li>Executive Assistants</li><li>Customer Service Officers</li>
+            </ul>
+            <p style="margin-top:10px">Focused on improving effectiveness, professionalism, and organizational impact.</p>
+          </article>
+
+          <article class="slider-slide program">
+            <h3>Entrepreneurship Development Programs</h3>
+            <p>Programs aimed at small and medium business owners covering:</p>
+            <ul>
+              <li>Business Management</li><li>Financing</li>
+              <li>Sales and Marketing</li><li>Business Growth Strategies</li>
+            </ul>
+          </article>
+
+          <article class="slider-slide program">
+            <h3>County Government Programs</h3>
+            <p>Training programs for County Assemblies and Executive Sections including:</p>
+            <ul>
+              <li>Legislative Drafting</li><li>Performance Management</li>
+              <li>Records Management</li><li>HR Management</li><li>Strategic Planning</li>
+            </ul>
+          </article>
+
+          <article class="slider-slide program">
+            <h3>Performance Contracting Programs</h3>
+            <p>Specialized sensitization and training programs in:</p>
+            <ul>
+              <li>Gender Mainstreaming</li><li>Disability Mainstreaming</li>
+              <li>HIV/AIDS</li><li>Occupational Safety and Health</li>
+              <li>Skills Gap Analysis</li><li>Competency Surveys</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+      <button class="slider-control prev" aria-label="Previous program">&#8249;</button>
+      <button class="slider-control next" aria-label="Next program">&#8250;</button>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <h2>Interested in Joining a Program?</h2>
+  <p>Reach out for schedules, customization or to enroll your team.</p>
+  <a href="{{url_for('public.contact')}}" class="btn btn-outline">Contact Us</a>
+</div>
+
+
+{% endblock %}

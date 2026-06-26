@@ -1,0 +1,14 @@
+{% extends 'admin/layout.html' %}{% from 'macros.html' import render_field %}{% block admin_content %}
+{% if package %}
+  <h1>Edit Package Item: {{ package.pricing.program.title }}</h1>
+{% else %}
+  <h1>Add Package Item: {{ pricing.program.title }}</h1>
+{% endif %}
+
+<form method="post" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ render_field(form.detail) }}
+  {{ render_field(form.included) }}
+  <button class="btn">{{ 'Update Package' if package else 'Save Package' }}</button>
+</form>
+{% endblock %}

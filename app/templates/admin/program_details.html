@@ -1,0 +1,670 @@
+{% extends 'admin/layout.html' %}
+{% from 'macros.html' import render_field %}
+{% block admin_content %}
+
+<div class="section-head">
+  <div>
+    <h1>{{ program.title }}</h1>
+    {% if program.subtitle %}<p style="color:var(--muted);margin-top:8px">{{ program.subtitle }}</p>{% endif %}
+  </div>
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+    <a class="btn btn-primary" href="{{ url_for('admin.edit_program', program_id=program.id) }}">Edit</a>
+    <form method="post" action="{{ url_for('admin.delete_program', program_id=program.id) }}" style="display:inline" onsubmit="return confirm('Delete this program?');">
+      <button class="btn" style="background:#e74c3c;color:#fff;padding:10px 16px;border-radius:8px">Delete</button>
+    </form>
+  </div>
+</div>
+
+<article class="program">
+  {% if program.banner_image %}
+    <div style="margin-bottom:18px;border-radius:8px;overflow:hidden">
+      <img src="{{ url_for('static', filename='uploads/' ~ program.banner_image) }}" alt="{{ program.title }} banner" style="width:100%;height:auto;object-fit:cover;display:block">
+    </div>
+  {% endif %}
+
+  <div class="program-meta" style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px">
+    <div><strong>Dates:</strong> {{ program.dates or 'TBA' }}</div>
+    <div><strong>Deadline:</strong> {{ program.deadline or 'None' }}</div>
+    <div><strong>Location:</strong> {{ program.location or 'TBA' }}</div>
+    <div><strong>Venue:</strong> {{ program.venue or 'TBA' }}</div>
+    {% if program.tags %}
+      <div><strong>Tags:</strong> {{ program.tags|map(attribute='name')|join(', ') }}</div>
+    {% endif %}
+  </div>
+
+  <div class="program-body">
+    <p style="color:var(--muted);line-height:1.8">{{ program.description }}</p>
+  </div>
+
+  <div class="tabs" style="margin-top:24px">
+    <div class="tab-list" role="tablist">
+      <button type="button" class="tab active" data-tab="highlights">Highlights</button>
+      <button type="button" class="tab" data-tab="audience">Audience</button>
+      <button type="button" class="tab" data-tab="fees">Fees</button>
+      <button type="button" class="tab" data-tab="packages">Packages</button>
+      <button type="button" class="tab" data-tab="schedule">Schedule</button>
+      <button type="button" class="tab" data-tab="activities">Activities</button>
+    </div>
+
+    <div class="tab-panels">
+      <section class="tab-panel active" id="tab-highlights">
+        <button class="btn btn-primary" type="button" data-modal="modal-highlight">Add Highlight</button>
+        {% if program.highlights %}
+        <table>
+          <thead style="font-weight:bold">
+        <tr>
+          <td>Highlight</td>
+          <td style="text-align:center">Actions</td>
+        </tr>
+      </thead>
+
+            {% for highlight in program.highlights %}
+              <tr>
+                <td>{{ highlight.details }}</td>
+                <td style="text-align:center;display:flex;gap:8px;justify-content:center">
+                  <button class="btn btn-secondary edit-highlight-btn" data-id="{{ highlight.id }}" data-details="{{ highlight.details }}" style="padding:6px 12px;font-size:0.9em">Edit</button>
+                  <form method="post" action="{{ url_for('admin.delete_highlight', highlight_id=highlight.id) }}" style="display:inline" onsubmit="return confirm('Delete this highlight?');">
+                    <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;font-size:0.9em;border:none;cursor:pointer">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <p>No highlights have been added yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="tab-panel" id="tab-audience">
+        <button class="btn btn-primary" type="button" data-modal="modal-audience">Add Audience</button>
+        {% if program.audience %}
+          <table style="margin-top:16px">
+            <thead style="font-weight:bold">
+              <tr>
+                <td>Audience Detail</td>
+                <td style="text-align:center">Actions</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for audience in program.audience %}
+                <tr>
+                  <td>{{ audience.detail }}</td>
+                  <td style="text-align:center;display:flex;gap:8px;justify-content:center">
+                    <button class="btn btn-secondary edit-audience-btn" data-id="{{ audience.id }}" data-detail="{{ audience.detail }}" style="padding:6px 12px;font-size:0.9em">Edit</button>
+                    <form method="post" action="{{ url_for('admin.delete_audience', audience_id=audience.id) }}" style="display:inline" onsubmit="return confirm('Delete this audience?');">
+                      <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;font-size:0.9em;border:none;cursor:pointer">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No audience details have been added yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="tab-panel" id="tab-fees">
+        <button class="btn btn-primary add-pricing-btn" type="button" data-modal="modal-pricing" data-program-id="{{ program.id }}">Add Fee</button>
+        {% if program.pricings %}
+          {% for pricing in program.pricings %}
+            <div style="margin-bottom:18px;padding:18px;border:1px solid var(--border);border-radius:12px;background:#f8f9fb;display:flex;justify-content:space-between;align-items:flex-start">
+              <div style="flex:1">
+                <p style="margin:0 0 10px;color:var(--text)"><strong>{{ pricing.description }}</strong></p>
+                <p style="margin:0;color:var(--muted);font-size:0.95rem">{{ pricing.packages|length }} package{{ pricing.packages|length != 1 and 's' or '' }}</p>
+              </div>
+              <div style="display:flex;gap:8px;margin-left:12px;flex-wrap:wrap">
+                <button class="btn btn-secondary edit-pricing-btn" data-id="{{ pricing.id }}" data-description="{{ pricing.description }}" type="button" style="padding:6px 12px;font-size:0.9em;white-space:nowrap">Edit</button>
+                <form method="post" action="{{ url_for('admin.delete_pricing', pricing_id=pricing.id) }}" style="display:inline" onsubmit="return confirm('Delete this fee?');">
+                  <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;font-size:0.9em;border:none;cursor:pointer;white-space:nowrap">Delete</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No fees have been added yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="tab-panel" id="tab-packages">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2 style="margin:0">Packages (by Fee)</h2>
+        </div>
+        {% if program.pricings %}
+          {% for pricing in program.pricings %}
+            <div style="margin-bottom:18px;padding:18px;border:1px solid var(--border);border-radius:12px;background:#f8f9fb">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <div style="flex:1;min-width:240px">
+                  <p style="margin:0 0 8px;color:var(--text)"><strong>{{ pricing.description }}</strong></p>
+                  <p style="margin:0;color:var(--muted);font-size:0.95rem">{{ pricing.packages|length }} package{{ pricing.packages|length != 1 and 's' or '' }}</p>
+                </div>
+                <button type="button" class="btn btn-primary add-package-btn" data-pricing-id="{{ pricing.id }}">Add Package</button>
+              </div>
+
+              {% if pricing.packages %}
+                <ul style="margin-top:12px;padding-left:20px;color:var(--muted);margin:0">
+                  {% for package in pricing.packages %}
+                    <li style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border);">
+                      <div style="flex:1">
+                        <div style="font-weight:600;color:var(--text)">{{ package.detail }}</div>
+                        {% if package.included %}<div style="color:var(--primary);font-size:0.9rem">Included</div>{% endif %}
+                      </div>
+                      <div style="display:flex;gap:8px">
+                        <button class="btn btn-secondary edit-package-btn" data-id="{{ package.id }}" data-detail="{{ package.detail }}" data-included="{{ package.included|lower }}" type="button" style="padding:6px 12px;font-size:0.9em">Edit</button>
+                        <form method="post" action="{{ url_for('admin.delete_package', package_id=package.id) }}" style="display:inline" onsubmit="return confirm('Delete this package item?');">
+                          <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;font-size:0.9em;border:none;cursor:pointer">Delete</button>
+                        </form>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p style="margin-top:12px;color:var(--muted)">No packages have been added for this fee yet.</p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No fees exist yet. Add a fee first.</p>
+        {% endif %}
+      </section>
+
+      <section class="tab-panel" id="tab-schedule">
+        <button class="btn btn-primary" type="button" data-modal="modal-day-schedule">Add Day Schedule</button>
+        {% if program.day_schedules %}
+          {% for schedule in program.day_schedules %}
+            <div style="margin-bottom:18px;padding:18px;border:1px solid var(--border);border-radius:12px;background:#f8f9fb">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div style="flex:1">
+                  <h3 style="margin:0 0 8px;color:var(--primary)">{{ schedule.title }}</h3>
+                  <p style="margin:0 0 8px;color:var(--muted)"><strong>{{ schedule.date }}</strong> · {{ schedule.description }}</p>
+                  {% if schedule.schedule_details %}
+                    <ul style="padding-left:20px;color:var(--muted);margin:0">
+                      {% for detail in schedule.schedule_details %}
+                        <li style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                          <span><strong>{{ detail.title }}:</strong> {{ detail.details }}</span>
+                          <form method="post" action="{{ url_for('admin.delete_schedule_detail', detail_id=detail.id) }}" style="display:inline" onsubmit="return confirm('Delete this schedule detail?');">
+                            <button class="btn" style="background:#e74c3c;color:#fff;padding:4px 8px;font-size:0.8em;border:none;cursor:pointer">Delete</button>
+                          </form>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                    <a href="{{ url_for('admin.create_schedule_detail', schedule_id=schedule.id) }}" class="btn btn-secondary" style="margin-top:10px;padding:6px 12px;font-size:0.9em">Add Detail</a>
+                  {% endif %}
+                </div>
+                <div style="display:flex;gap:8px;margin-left:12px">
+                  <button class="btn btn-secondary edit-day-schedule-btn" data-id="{{ schedule.id }}" data-title="{{ schedule.title }}" data-date="{{ schedule.date }}" data-description="{{ schedule.description }}" style="padding:6px 12px;font-size:0.9em;white-space:nowrap">Edit</button>
+                  <form method="post" action="{{ url_for('admin.delete_day_schedule', schedule_id=schedule.id) }}" style="display:inline" onsubmit="return confirm('Delete this day schedule?');">
+                    <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;font-size:0.9em;border:none;cursor:pointer;white-space:nowrap">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No schedule items have been added yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="tab-panel" id="tab-activities">
+        {% if not program.day_schedules %}
+          <p>Please add a day schedule before adding activities.</p>
+          <button class="btn btn-primary" type="button" data-modal="modal-day-schedule">Add Day Schedule</button>
+        {% else %}
+          <button class="btn btn-primary" type="button" data-modal="modal-activity">Add Activity</button>
+          <div class="subtabs" style="margin-top:18px">
+            <div class="subtab-list" role="tablist" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+              {% for schedule in program.day_schedules %}
+                <button type="button" class="subtab {{ 'active' if loop.first else '' }}" data-subtab="schedule-{{ schedule.id }}">{{ schedule.title }}</button>
+              {% endfor %}
+            </div>
+            <div class="subtab-panels">
+              {% for schedule in program.day_schedules %}
+                <div class="subtab-panel {{ 'active' if loop.first else '' }}" id="schedule-{{ schedule.id }}">
+                  <h3 style="margin:0 0 10px;color:var(--primary);font-size:1.1rem">{{ schedule.title }}</h3>
+                  {% if schedule.activities %}
+                    {% for activity in schedule.activities %}
+                      <div style="margin-bottom:18px;padding:18px;border:1px solid var(--border);border-radius:12px;background:#f8f9fb;display:flex;justify-content:space-between;align-items:flex-start">
+                        <div style="flex:1">
+                          <h4 style="margin:0 0 8px;color:var(--primary)">{{ activity.title }}</h4>
+                          <p style="margin:0 0 6px;color:var(--muted)"><strong>{{ activity.day }}</strong> · {{ activity.time }}</p>
+                          <p style="margin:0;color:var(--muted)">{{ activity.details }}</p>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-left:12px">
+                          <button class="btn btn-secondary edit-activity-btn" data-id="{{ activity.id }}" data-schedule-id="{{ activity.day_schedule_id }}" data-title="{{ activity.title }}" data-time="{{ activity.time }}" data-details="{{ activity.details }}" style="padding:6px 12px;font-size:0.9em;white-space:nowrap">Edit</button>
+                          <form method="post" action="{{ url_for('admin.delete_activity', activity_id=activity.id) }}" style="display:inline" onsubmit="return confirm('Delete this activity?');">
+                            <button class="btn" style="background:#e74c3c;color:#fff;padding:6px 12px;font-size:0.9em;border:none;cursor:pointer;white-space:nowrap">Delete</button>
+                          </form>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  {% else %}
+                    <p>No activities have been added yet for this schedule.</p>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </section>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-highlight" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Add Highlight</h2>
+      <form method="post" action="{{ url_for('admin.create_highlight', program_id=program.id) }}" class="form-card">
+        {{ highlight_form.hidden_tag() }}
+        {{ render_field(highlight_form.details) }}
+        <button class="btn btn-primary" type="submit">Save Highlight</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-audience" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Add Audience</h2>
+      <form method="post" action="{{ url_for('admin.create_audience', program_id=program.id) }}" class="form-card">
+        {{ audience_form.hidden_tag() }}
+        {{ render_field(audience_form.detail) }}
+        <button class="btn btn-primary" type="submit">Save Audience</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-participant" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Add Participant</h2>
+      <form method="post" action="{{ url_for('admin.create_participant', program_id=program.id) }}" class="form-card">
+        {{ participant_form.hidden_tag() }}
+        {{ render_field(participant_form.participant_type) }}
+        {{ render_field(participant_form.name) }}
+        {{ render_field(participant_form.email) }}
+        {{ render_field(participant_form.phone) }}
+        {{ render_field(participant_form.notes) }}
+        <button class="btn btn-primary" type="submit">Save Participant</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-pricing" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Add Pricing</h2>
+      <form method="post" action="{{ url_for('admin.create_pricing', program_id=program.id) }}" class="form-card">
+        {{ pricing_form.hidden_tag() }}
+        {{ render_field(pricing_form.description) }}
+        <button class="btn btn-primary" type="submit">Save Pricing</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-day-schedule" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Add Day Schedule</h2>
+      <form method="post" action="{{ url_for('admin.create_day_schedule', program_id=program.id) }}" class="form-card">
+        {{ day_schedule_form.hidden_tag() }}
+        {{ render_field(day_schedule_form.title) }}
+        {{ render_field(day_schedule_form.date) }}
+        {{ render_field(day_schedule_form.description) }}
+        <button class="btn btn-primary" type="submit">Save Schedule</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-activity" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Add Activity</h2>
+      <form method="post" action="{{ url_for('admin.create_activity', program_id=program.id) }}" class="form-card">
+        {{ activity_form.hidden_tag() }}
+        {{ render_field(activity_form.day_schedule_id) }}
+        {{ render_field(activity_form.title) }}
+        {{ render_field(activity_form.time) }}
+        {{ render_field(activity_form.details) }}
+        <button class="btn btn-primary" type="submit">Save Activity</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Modals -->
+  <div class="modal" id="modal-edit-highlight" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Highlight</h2>
+      <form method="post" id="edit-highlight-form" class="form-card">
+        {{ highlight_form.hidden_tag() }}
+        {{ render_field(highlight_form.details) }}
+        <button class="btn btn-primary" type="submit">Update Highlight</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-audience" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Audience</h2>
+      <form method="post" id="edit-audience-form" class="form-card">
+        {{ audience_form.hidden_tag() }}
+        {{ render_field(audience_form.detail) }}
+        <button class="btn btn-primary" type="submit">Update Audience</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-participant" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Participant</h2>
+      <form method="post" id="edit-participant-form" class="form-card">
+        {{ participant_form.hidden_tag() }}
+        {{ render_field(participant_form.participant_type) }}
+        {{ render_field(participant_form.name) }}
+        {{ render_field(participant_form.email) }}
+        {{ render_field(participant_form.phone) }}
+        {{ render_field(participant_form.notes) }}
+        <button class="btn btn-primary" type="submit">Update Participant</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-pricing" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Pricing</h2>
+      <form method="post" id="edit-pricing-form" class="form-card">
+        {{ pricing_form.hidden_tag() }}
+        {{ render_field(pricing_form.description) }}
+        <button class="btn btn-primary" type="submit">Update Pricing</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-package" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Package</h2>
+      <form method="post" id="edit-package-form" class="form-card">
+        {{ package_form.hidden_tag() }}
+        {{ render_field(package_form.detail) }}
+        {{ render_field(package_form.included) }}
+        <button class="btn btn-primary" type="submit">Update Package</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-day-schedule" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Day Schedule</h2>
+      <form method="post" id="edit-day-schedule-form" class="form-card">
+        {{ day_schedule_form.hidden_tag() }}
+        {{ render_field(day_schedule_form.title) }}
+        {{ render_field(day_schedule_form.date) }}
+        {{ render_field(day_schedule_form.description) }}
+        <button class="btn btn-primary" type="submit">Update Schedule</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-schedule-detail" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Schedule Detail</h2>
+      <form method="post" id="edit-schedule-detail-form" class="form-card">
+        {{ schedule_detail_form.hidden_tag() }}
+        {{ render_field(schedule_detail_form.title) }}
+        {{ render_field(schedule_detail_form.details) }}
+        <button class="btn btn-primary" type="submit">Update Detail</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-edit-activity" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-inner">
+      <button type="button" class="modal-close" data-modal-close>&times;</button>
+      <h2>Edit Activity</h2>
+      <form method="post" id="edit-activity-form" class="form-card">
+        {{ activity_form.hidden_tag() }}
+        {{ render_field(activity_form.day_schedule_id) }}
+        {{ render_field(activity_form.title) }}
+        {{ render_field(activity_form.time) }}
+        {{ render_field(activity_form.details) }}
+        <button class="btn btn-primary" type="submit">Update Activity</button>
+      </form>
+    </div>
+  </div>
+</article>
+
+<script>
+  // Tab functionality
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      const tabName = e.target.getAttribute('data-tab');
+      
+      // Hide all panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      
+      // Deactivate all tabs
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+      });
+      
+      // Show selected panel
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      e.target.classList.add('active');
+    });
+  });
+
+  // Modal functionality
+  document.querySelectorAll('[data-modal-close]').forEach(closeBtn => {
+    closeBtn.addEventListener('click', (e) => {
+      if (e.target.dataset.modalClose !== undefined || e.target.closest('[data-modal-close]')) {
+        const modal = e.target.closest('.modal');
+        if (modal) modal.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-modal]').forEach(button => {
+    button.addEventListener('click', () => {
+      const modalId = button.getAttribute('data-modal');
+      const modal = document.getElementById(modalId);
+      if (modal) modal.setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Close modal when clicking outside
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal || e.target.hasAttribute('data-modal-close')) {
+        modal.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+
+  // Subtab functionality for schedule activities
+  document.querySelectorAll('.subtab').forEach(subtab => {
+    subtab.addEventListener('click', (e) => {
+      const targetId = e.target.getAttribute('data-subtab');
+      document.querySelectorAll('.subtab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.querySelectorAll('.subtab').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+      e.target.classList.add('active');
+    });
+  });
+
+  // Edit Highlight
+  document.querySelectorAll('.edit-highlight-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const highlightId = btn.getAttribute('data-id');
+      const details = btn.getAttribute('data-details');
+      
+      document.getElementById('edit-highlight-form').action = `/admin/highlights/${highlightId}/edit`;
+      document.getElementById('edit-highlight-form').querySelector('[name="details"]').value = details;
+      document.getElementById('modal-edit-highlight').setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Audience
+  document.querySelectorAll('.edit-audience-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const audienceId = btn.getAttribute('data-id');
+      const detail = btn.getAttribute('data-detail');
+      
+      document.getElementById('edit-audience-form').action = `/admin/audience/${audienceId}/edit`;
+      document.getElementById('edit-audience-form').querySelector('[name="detail"]').value = detail;
+      document.getElementById('modal-edit-audience').setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Participant
+  document.querySelectorAll('.edit-participant-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const participantId = btn.getAttribute('data-id');
+      const name = btn.getAttribute('data-name');
+      const type = btn.getAttribute('data-type');
+      const email = btn.getAttribute('data-email');
+      const phone = btn.getAttribute('data-phone');
+      const notes = btn.getAttribute('data-notes');
+      
+      document.getElementById('edit-participant-form').action = `/admin/participants/${participantId}/edit`;
+      document.getElementById('edit-participant-form').querySelector('[name="participant_type"]').value = type;
+      document.getElementById('edit-participant-form').querySelector('[name="name"]').value = name;
+      document.getElementById('edit-participant-form').querySelector('[name="email"]').value = email;
+      document.getElementById('edit-participant-form').querySelector('[name="phone"]').value = phone;
+      document.getElementById('edit-participant-form').querySelector('[name="notes"]').value = notes;
+      document.getElementById('modal-edit-participant').setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Pricing
+  document.querySelectorAll('.edit-pricing-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pricingId = btn.getAttribute('data-id');
+      const description = btn.getAttribute('data-description');
+      
+      document.getElementById('edit-pricing-form').action = `/admin/pricing/${pricingId}/edit`;
+      document.getElementById('edit-pricing-form').querySelector('[name="description"]').value = description;
+      document.getElementById('modal-edit-pricing').setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Package
+  document.querySelectorAll('.edit-package-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const packageId = btn.getAttribute('data-id');
+      const detail = btn.getAttribute('data-detail');
+      const included = btn.getAttribute('data-included') === 'true';
+      
+      const form = document.getElementById('edit-package-form');
+      form.action = `/admin/packages/${packageId}/edit`;
+      form.querySelector('[name="detail"]').value = detail;
+      form.querySelector('[name="included"]').checked = included;
+      const modal = document.getElementById('modal-edit-package');
+      modal.querySelector('h2').textContent = 'Edit Package';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.textContent = 'Update Package';
+      modal.setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Add Package (open modal in create mode)
+  document.querySelectorAll('.add-package-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pricingId = btn.getAttribute('data-pricing-id');
+      const form = document.getElementById('edit-package-form');
+      form.action = `/admin/pricing/${pricingId}/packages/new`;
+      // clear fields
+      const detailField = form.querySelector('[name="detail"]');
+      const includedField = form.querySelector('[name="included"]');
+      if (detailField) detailField.value = '';
+      if (includedField) includedField.checked = false;
+      // update modal title and button
+      const modal = document.getElementById('modal-edit-package');
+      modal.querySelector('h2').textContent = 'Add Package';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.textContent = 'Save Package';
+      modal.setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Day Schedule
+  document.querySelectorAll('.edit-day-schedule-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const scheduleId = btn.getAttribute('data-id');
+      const title = btn.getAttribute('data-title');
+      const date = btn.getAttribute('data-date');
+      const description = btn.getAttribute('data-description');
+      
+      document.getElementById('edit-day-schedule-form').action = `/admin/day-schedules/${scheduleId}/edit`;
+      document.getElementById('edit-day-schedule-form').querySelector('[name="title"]').value = title;
+      document.getElementById('edit-day-schedule-form').querySelector('[name="date"]').value = date;
+      document.getElementById('edit-day-schedule-form').querySelector('[name="description"]').value = description;
+      document.getElementById('modal-edit-day-schedule').setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Schedule Detail
+  document.querySelectorAll('.edit-schedule-detail-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const detailId = btn.getAttribute('data-id');
+      const title = btn.getAttribute('data-title');
+      const details = btn.getAttribute('data-details');
+      
+      document.getElementById('edit-schedule-detail-form').action = `/admin/schedule-details/${detailId}/edit`;
+      document.getElementById('edit-schedule-detail-form').querySelector('[name="title"]').value = title;
+      document.getElementById('edit-schedule-detail-form').querySelector('[name="details"]').value = details;
+      document.getElementById('modal-edit-schedule-detail').setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  // Edit Activity
+  document.querySelectorAll('.edit-activity-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const activityId = btn.getAttribute('data-id');
+      const scheduleId = btn.getAttribute('data-schedule-id');
+      const title = btn.getAttribute('data-title');
+      const time = btn.getAttribute('data-time');
+      const details = btn.getAttribute('data-details');
+      
+      document.getElementById('edit-activity-form').action = `/admin/activities/${activityId}/edit`;
+      const select = document.getElementById('edit-activity-form').querySelector('[name="day_schedule_id"]');
+      if (select) {
+        select.value = scheduleId;
+      }
+      document.getElementById('edit-activity-form').querySelector('[name="title"]').value = title;
+      document.getElementById('edit-activity-form').querySelector('[name="time"]').value = time;
+      document.getElementById('edit-activity-form').querySelector('[name="details"]').value = details;
+      document.getElementById('modal-edit-activity').setAttribute('aria-hidden', 'false');
+    });
+  });
+</script>
+{% endblock %}
+

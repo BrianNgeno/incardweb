@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="container section admin">
+  <aside class="admin-menu">
+    <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('admin.programs') }}">Programs</a>
+    <a href="{{ url_for('admin.registrations') }}">Registrations</a>
+    <a href="{{ url_for('admin.users') }}">Admins</a>
+  </aside>
+  <div class="admin-content">
+    {% block admin_content %}{% endblock %}
+  </div>
+</section>
+{% endblock %}

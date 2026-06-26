@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% from 'macros.html' import render_field %}
+{% block content %}<section class="container auth-card"><h1>Admin Login</h1><form method="post">{{ form.hidden_tag() }}{{ render_field(form.email) }}{{ render_field(form.password) }}<button class="btn">Login</button></form><p class="muted"></section>{% endblock %}

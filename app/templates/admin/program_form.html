@@ -1,0 +1,16 @@
+{% extends 'admin/layout.html' %}{% from 'macros.html' import render_field %}{% block admin_content %}
+<h1>{{ title }}</h1>
+<form method="post" enctype="multipart/form-data" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ render_field(form.title) }}
+  {{ render_field(form.subtitle) }}
+  {{ render_field(form.banner_image) }}
+  {{ render_field(form.description) }}
+  {{ render_field(form.dates) }}
+  {{ render_field(form.deadline) }}
+  {{ render_field(form.location) }}
+  {{ render_field(form.venue) }}
+  {{ render_field(form.tags) }}
+  <button class="btn">Save Program</button>
+</form>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}{% block content %}
+
+<section class="page-header">
+  <h1>About InCAD</h1>
+  <p>A professional training institution registered in 2011, dedicated to organizational performance through research and staff empowerment.</p>
+</section>
+
+<section>
+  <div class="container split">
+    <div>
+      <h2>Who We Are</h2>
+      <p>InCAD – Institute for Capacity Development is a training institution registered in 2011 with a mission to promote performance through research and staff empowerment.</p>
+      <p>We provide demand-driven programs and learning solutions tailored to the needs of organizations, counties, government agencies, and individuals seeking professional growth and improved performance.</p>
+    </div>
+    <img src="{{ url_for('static', filename='./images/about-us.jpg') }}" alt="InCAD team">
+  </div>
+</section>
+
+<section class="bg-soft">
+  <div class="container">
+    <div class="grid grid-2">
+      <div class="card"><div class="icon">V</div><h3>Our Vision</h3><p>To deliver sustainable and qualified human capital for the increasingly globalized environment.</p></div>
+      <div class="card"><div class="icon">M</div><h3>Our Mission</h3><p>To build capacity through research, curriculum design, and offer programs aimed at producing outstanding human performance, attitude and competence in your organization. We advocate for ethical practices by infusing ethics into our modules.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Our Core Values</h2>
+    <p class="section-sub">The principles that guide everything we do.</p>
+    <div class="grid grid-3">
+      <div class="card value-card"><div class="icon">T</div><h3>Transparency</h3><p>We uphold honesty, accountability, and openness in all our engagements.</p></div>
+      <div class="card value-card"><div class="icon">I</div><h3>Innovation</h3><p>We embrace creative and practical solutions that improve organizational performance.</p></div>
+      <div class="card value-card"><div class="icon">P</div><h3>Professionalism</h3><p>We maintain high standards of competence, ethics, and service delivery.</p></div>
+      <div class="card value-card"><div class="icon">W</div><h3>Teamwork</h3><p>We believe in collaboration and partnership to achieve shared success.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-soft">
+  <div class="container split">
+    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=80" alt="Ethics and integrity">
+    <div>
+      <h2>Our Ethics</h2>
+      <p>InCAD's services are offered to the highest degree of integrity and ethics.</p>
+      <p>As a policy and belief of the organization and its staff, we do not offer any incentives in order to secure opportunities to offer our services. Our success has been driven by the high quality of service we provide to our clients.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Our Team</h2>
+    <p class="section-sub">Our team consists of experienced consultants, trainers, and researchers committed to delivering practical, professional, and impactful learning solutions across diverse sectors.</p>
+    <div class="grid grid-3 team-grid" style="margin-top:30px">
+      <article class="card team-card">
+        <div class="team-photo" aria-hidden="true">
+<span><img src="{{ url_for('static' , filename='./images/team/board-chair_0004_Prof.-Paul-P.W.-Achola.jpg')}}" alt="" srcset="">
+</span>
+        </div>
+        <h3>Paul W Achola</h3>
+        <p>Prof. Paul P.W. Achola is a distinguished scholar, researcher, and academic leader with over 40 years of experience in education, policy, and consultancy, currently serving as Research Professor at the Catholic University of Eastern Africa and Chairman of the Ethics and Integrity Institute. He has led major national and international research initiatives, held senior academic and public leadership roles, and contributed extensively to education, governance, and community development in Kenya.</p>
+      </article>
+      <article class="card team-card">
+        <div class="team-photo" aria-hidden="true">
+          <img src="{{ url_for('static' , filename='./images/team/board-chair_0003_JACKY-NYANDENJE.jpg')}}" alt="" srcset="">
+        </div>
+        <h3>Jackline Nyandeje</h3>
+        <p>Jacky is a certified ethics officer, governance trainer, and Executive Director of the Ethics and Integrity Institute, with extensive experience in leadership, research, and capacity development. She has facilitated global ethics and governance programs across more than 25 countries and served in various leadership and board roles in education, corporate governance, and professional organizations.</p>
+      </article>
+      <article class="card team-card">
+        <div class="team-photo" aria-hidden="true"><span>Photo</span></div>
+        <h3>Julie S Ogoye</h3>
+        <p>
+          Julie S. Ogoye is an experienced ethics and integrity leader at the Teachers Service Commission, specializing in anti-corruption, governance, and values-driven leadership. She has led national integrity initiatives, authored ethics resources, and championed ethical standards in Kenya’s education sector for over 20 years.
+        </p>
+      </article>
+    </div>
+  </div>
+</section> 
+
+
+{% endblock %}

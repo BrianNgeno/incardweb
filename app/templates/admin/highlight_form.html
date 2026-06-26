@@ -1,0 +1,8 @@
+{% extends 'admin/layout.html' %}{% from 'macros.html' import render_field %}{% block admin_content %}
+<h1>Add Highlight: {{ program.title }}</h1>
+<form method="post" class="form-card">
+  {{ form.hidden_tag() }}
+  {{ render_field(form.details) }}
+  <button class="btn">Save Highlight</button>
+</form>
+{% endblock %}

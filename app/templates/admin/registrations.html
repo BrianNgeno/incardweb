@@ -1,0 +1,54 @@
+{% extends 'admin/layout.html' %}{% block admin_content %}
+<div style="margin-bottom:24px">
+  <h1 style="margin-bottom:16px">Registrations</h1>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <label for="program-filter" style="color:var(--text);font-weight:500">Filter by Event:</label>
+    <select id="program-filter" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:1rem;cursor:pointer">
+      <option value="">All Events</option>
+      {% set programs = registrations|map(attribute='program')|unique(attribute='id')|list %}
+      {% for program in programs %}
+        <option value="{{ program.id }}">{{ program.title }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+<table style="width:100%;border-collapse:collapse;margin-top:16px">
+  <thead>
+    <tr style="background:#f1f7fd;border-bottom:1px solid var(--border)">
+      <th style="padding:12px 16px;text-align:left;color:var(--text)">Name</th>
+      <th style="padding:12px 16px;text-align:left;color:var(--text)">Email</th>
+      <th style="padding:12px 16px;text-align:left;color:var(--text)">Phone</th>
+      <th style="padding:12px 16px;text-align:left;color:var(--text)">Organisation</th>
+      <th style="padding:12px 16px;text-align:left;color:var(--text)">Program</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in registrations %}
+      <tr data-program-id="{{ r.program.id }}" style="border-bottom:1px solid var(--border)">
+        <td style="padding:12px 16px;color:var(--text)">{{ r.full_name }}</td>
+        <td style="padding:12px 16px;color:var(--text)">{{ r.email }}</td>
+        <td style="padding:12px 16px;color:var(--text)">{{ r.phone }}</td>
+        <td style="padding:12px 16px;color:var(--text)">{{ r.organisation }}</td>
+        <td style="padding:12px 16px;color:var(--text)">{{ r.program.title }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+  const filterSelect = document.getElementById('program-filter');
+  const tableRows = document.querySelectorAll('table tbody tr');
+
+  filterSelect.addEventListener('change', (e) => {
+    const selectedProgramId = e.target.value;
+    tableRows.forEach(row => {
+      if (selectedProgramId === '') {
+        row.style.display = '';
+      } else {
+        row.style.display = row.getAttribute('data-program-id') === selectedProgramId ? '' : 'none';
+      }
+    });
+  });
+</script>
+{% endblock %}
