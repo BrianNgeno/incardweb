@@ -1,1 +1,254 @@
-{% extends 'base.html' %}{% block content %}<section class="container section"><h1>Contact Us</h1><p>Email: info@example.org</p><p>Phone: +254 700 000 000</p><p>Location: Nairobi, Kenya</p></section>{% endblock %}
+{% extends 'base.html' %}
+{% block content %}
+
+oup">
+            <label for="message">Message / Inquiry *</label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              maxlength="2000"
+            ></textarea>
+          </div>
+          <div class="form-response" id="form-response">
+
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width: 100%"
+            id="send-button"
+          >
+            Send Inquiry
+          </button>
+          <div class="form-msg" id="formMsg"></div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h4>InCAD</h4>
+          <p>
+            Institute for Capacity Development. Building capacity through
+            research, training, and professional development.
+          </p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li>Training & Capacity Building</li>
+            <li>Research & Surveys</li>
+            <li>Study Missions</li>
+            <li>Recruitment & HR</li>
+            <li>Performance Contracting</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>📍 P.O. BOX 2521 – 00621</p>
+          <p>📞 0202173685</p>
+          <p>📱 +254 722 741 <header class="site-header">
+      <nav class="nav">
+        <a href="index.html" class="logo">
+          <div class="logo-p">
+            <img src="./images/logo/logo.png" alt="" srcset="" />
+          </div>
+          <div>InCAD<small>Institute for Capacity Development</small></div></a
+        >
+        <button class="nav-toggle" aria-label="Menu">☰</button>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="page-header">
+      <h1>Get in Touch</h1>
+      <p>
+        We would love to hear from you. Reach out for inquiries, partnerships,
+        training programs, consultancy services, or organizational support.
+      </p>
+    </section>
+
+    <section>
+      <div class="container contact-grid">
+        <div class="info-box">
+          <h3>Contact Information</h3>
+          <p style="margin-bottom: 20px">
+            InCAD – Institute for Capacity Development
+          </p>
+
+          <div class="row">
+            <span>📍</span><span>P.O. BOX 2521 – 00621</span>
+          </div>
+          <div class="row">
+            <span>📞</span><span>Telephone: 0202173685</span>
+          </div>
+          <div class="row">
+            <span>📱</span
+            ><span
+              >+254 722 741 293<br />+254 725 851 063<br />+254 789 702
+              582</span
+            >
+          </div>
+          <div class="row">
+            <span>✉️</span
+            ><span
+              ><a
+                href="mailto:info@incad.org"
+                style="color: #fff; text-decoration: underline"
+                >info@incad.org</a
+              ></span
+            >
+          </div>
+          <div class="row"><span>🌐</span><span>www.incad.org</span></div>
+
+          <div class="hours">
+            <h3 style="font-size: 1.1rem; margin-bottom: 8px">Office Hours</h3>
+            <p>Monday – Friday</p>
+            <p>8:00 AM – 5:00 PM</p>
+          </div>
+        </div>
+
+        <form class="form" id="contactForm">
+          <h3 style="color: var(--primary); margin-bottom: 18px">
+            Send Us an Inquiry
+          </h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullname">Full Name *</label>
+              <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                required
+                maxlength="100"
+              />
+            </div>
+            <div class="form-group">
+              <label for="org">Organization Name</label>
+              <input type="text" id="org" name="org" maxlength="150" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                maxlength="120"
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" maxlength="25" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject *</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              required
+              maxlength="150"
+            />
+          </div>
+          <div class="form-group">
+            <label for="service">Service of Interest</label>
+            <select id="service" name="service">
+              <option value="">-- Select a Service --</option>
+              <option>Training & Capacity Development</option>
+              <option>Research & Surveys</option>
+              <option>Study Missions & Conference Tourism</option>
+              <option>Study Abroad & Work Abroad</option>
+              <option>Performance Contracting Support</option>
+              <option>Recruitment & HR Consultancy</option>
+              <option>Entrepreneurship Development</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-gr 293</p>
+          <p>✉️ <a href="mailto:info@incad.org">info@incad.org</a></p>
+          <p>🌐 www.incad.org</p>
+        </div>
+      </div>
+      <div class="footer-bottom container">
+        &copy; <span id="year"></span> InCAD - Institute for Capacity
+        Development. All rightlementById("contactForm");
+      const formResponse = document.getEs reserved.
+      </div>
+    </footer>
+    <script src="script.js"></script>
+
+    <script>
+      const form = document.getElementById("form-response");
+      const sendButton = document.getElementById("send-button");
+      if (sendButton) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const fullname = document.getElementById("fullname");
+          const org = document.getElementById("org");
+          const email = document.getElementById("email");
+          const subject = document.getElementById("subject");
+          const phone = document.getElementById("phone");
+          const service = document.getElementById("service");
+          const message = document.getElementById("message");
+
+          const Request_data = {"Full Name":fullname.value, 
+          "Organization Name":org.value,
+          "Subject": subject.value,
+          "Email": email.value,
+          "Phone": phone.value, 
+          "Service of Interest":service.value, 
+          "Message":message.value}
+
+          fetch("send.php",{
+            method:"POST",
+            mode : "same-origin",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(Request_data)
+          }).then(response => response.json()).then(data => {
+            if(data.status == "success"){
+              formResponse.innerHTML = "<p class='success-label' style='color:rgb(144, 203, 108);'> Message Sent Successfully<p>";
+              fullname.value = "";
+              org.value = "";
+              email.value = "";
+              subject.value = "";
+              phone.value = "";
+              service.value = "";
+              message.value = "";
+            }else{
+              formResponse.innerHTML  = "<p class='error-label' style='color:rgb(203, 108, 108);'>Message Not Sent, Please Try Again or Send Email to <a href='mailto:info@incad.org'>info@incad.org</a>  <p>";
+            }
+          }).catch(error => {
+           console.log("error", error) 
+          }
+          )
+
+        })
+      }
+    </script>
+{% endblock %}
