@@ -1,66 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-oup">
-            <label for="message">Message / Inquiry *</label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              maxlength="2000"
-            ></textarea>
-          </div>
-          <div class="form-response" id="form-response">
-
-          </div>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            style="width: 100%"
-            id="send-button"
-          >
-            Send Inquiry
-          </button>
-          <div class="form-msg" id="formMsg"></div>
-        </form>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <div class="container footer-grid">
-        <div>
-          <h4>InCAD</h4>
-          <p>
-            Institute for Capacity Development. Building capacity through
-            research, training, and professional development.
-          </p>
-        </div>
-        <div>
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="programs.html">Programs</a></li>
-            <li><a href="portfolio.html">Portfolio</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Services</h4>
-          <ul>
-            <li>Training & Capacity Building</li>
-            <li>Research & Surveys</li>
-            <li>Study Missions</li>
-            <li>Recruitment & HR</li>
-            <li>Performance Contracting</li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <p>📍 P.O. BOX 2521 – 00621</p>
-          <p>📞 0202173685</p>
-          <p>📱 +254 722 741 <header class="site-header">
+<header class="site-header">
       <nav class="nav">
         <a href="index.html" class="logo">
           <div class="logo-p">
@@ -188,21 +129,80 @@ oup">
               <option>Other</option>
             </select>
           </div>
-          <div class="form-gr 293</p>
+          <div class="form-group">
+            <label for="message">Message / Inquiry *</label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              maxlength="2000"
+            ></textarea>
+          </div>
+          <div class="form-response" id="form-response">
+
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width: 100%"
+            id="send-button"
+          >
+            Send Inquiry
+          </button>
+          <div class="form-msg" id="formMsg"></div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h4>InCAD</h4>
+          <p>
+            Institute for Capacity Development. Building capacity through
+            research, training, and professional development.
+          </p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li>Training & Capacity Building</li>
+            <li>Research & Surveys</li>
+            <li>Study Missions</li>
+            <li>Recruitment & HR</li>
+            <li>Performance Contracting</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>📍 P.O. BOX 2521 – 00621</p>
+          <p>📞 0202173685</p>
+          <p>📱 +254 722 741 293</p>
           <p>✉️ <a href="mailto:info@incad.org">info@incad.org</a></p>
           <p>🌐 www.incad.org</p>
         </div>
       </div>
       <div class="footer-bottom container">
         &copy; <span id="year"></span> InCAD - Institute for Capacity
-        Development. All rightlementById("contactForm");
-      const formResponse = document.getEs reserved.
+        Development. All rights reserved.
       </div>
     </footer>
     <script src="script.js"></script>
 
     <script>
-      const form = document.getElementById("form-response");
+      const form = document.getElementById("contactForm");
+      const formResponse = document.getElementById("form-response");
       const sendButton = document.getElementById("send-button");
       if (sendButton) {
         form.addEventListener("submit", function (e) {
